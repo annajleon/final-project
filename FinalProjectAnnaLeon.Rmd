@@ -16,22 +16,44 @@ library(DataComputing)
 library(readr)
 ```
 
-## Importing and Inspecting Data
+## Data Access
 
 ```{r}
-nycdata <- read_csv("AB_NYC_2019.csv")
+NYC <- read_csv("AB_NYC_2019.csv")
 
-str(nycdata)
-head(nycdata)
+head(NYC)
+names(NYC)
 ```
 
-## Data Cleaning
-
 ```{r}
-
+glimpse(NYC) 
 ```
 
 ## Data Wrangling
+
+```{r}
+BoroughAvgPrice <-
+  NYC %>%
+    group_by(borough = neighbourhood_group) %>%
+    summarise(avg_price = round(mean(price, na.rm=TRUE))) %>%
+    arrange(desc(avg_price))
+BoroughAvgPrice
+```
+
+```{r}
+NYCwAvg <-
+  NYC %>%
+    left_join(BoroughAvgPrice, by = c("neighbourhood_group" = "borough")) %>%
+    rename(avg_price_in_borough = avg_price)
+NYCwAvg
+```
+
+```{r}
+#insert nested ifs to fill column that says expensive, average, cheap for borough
+```
+
+
+## Data Visualization
 
 ```{r}
 
