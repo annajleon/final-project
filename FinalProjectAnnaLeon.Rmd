@@ -1,0 +1,19 @@
+---
+title: "STAT 184 Final Project"
+subtitle: "NYC AirBnb Data"
+author: "Anna Leon"
+output: html_notebook
+---
+
+## Front Matter
+
+```{r}
+# clean up workspace environment
+rm(list = ls())
+
+# all packages used for the assignment
+library(DataComputing)
+
+```
+
+## 
