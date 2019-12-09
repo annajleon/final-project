@@ -1756,51 +1756,117 @@ summary {
 <h2>Front Matter</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjbGVhbiB1cCB3b3Jrc3BhY2UgZW52aXJvbm1lbnRcbnJtKGxpc3QgPSBscygpKVxuXG4jIGFsbCBwYWNrYWdlcyB1c2VkIGZvciB0aGUgYXNzaWdubWVudFxubGlicmFyeShEYXRhQ29tcHV0aW5nKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjbGVhbiB1cCB3b3Jrc3BhY2UgZW52aXJvbm1lbnRcbnJtKGxpc3QgPSBscygpKVxuXG4jIGFsbCBwYWNrYWdlcyB1c2VkIGZvciB0aGUgYXNzaWdubWVudFxubGlicmFyeShEYXRhQ29tcHV0aW5nKVxubGlicmFyeShyZWFkcilcblxuYGBgIn0= -->
 <pre class="r"><code># clean up workspace environment
 rm(list = ls())
 
 # all packages used for the assignment
-library(DataComputing)</code></pre>
+library(DataComputing)
+library(readr)
+</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiBkcGx5clxuUmVnaXN0ZXJlZCBTMyBtZXRob2Qgb3ZlcndyaXR0ZW4gYnkgJ2RwbHlyJzpcbiAgbWV0aG9kICAgICAgICAgICBmcm9tXG4gIHByaW50LnJvd3dpc2VfZGYgICAgIFxuXG5BdHRhY2hpbmcgcGFja2FnZTogkWRwbHlyklxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIJFwYWNrYWdlOnN0YXRzkjpcblxuICAgIGZpbHRlciwgbGFnXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0cyBhcmUgbWFza2VkIGZyb20gkXBhY2thZ2U6YmFzZZI6XG5cbiAgICBpbnRlcnNlY3QsIHNldGRpZmYsIHNldGVxdWFsLCB1bmlvblxuXG5Mb2FkaW5nIHJlcXVpcmVkIHBhY2thZ2U6IGdncGxvdDJcblJlZ2lzdGVyZWQgUzMgbWV0aG9kcyBvdmVyd3JpdHRlbiBieSAnaHRtbHRvb2xzJzpcbiAgbWV0aG9kICAgICAgICAgICAgICAgZnJvbSAgICAgICAgIFxuICBwcmludC5odG1sICAgICAgICAgICB0b29sczpyc3R1ZGlvXG4gIHByaW50LnNoaW55LnRhZyAgICAgIHRvb2xzOnJzdHVkaW9cbiAgcHJpbnQuc2hpbnkudGFnLmxpc3QgdG9vbHM6cnN0dWRpb1xuUmVnaXN0ZXJlZCBTMyBtZXRob2Qgb3ZlcndyaXR0ZW4gYnkgJ2h0bWx3aWRnZXRzJzpcbiAgbWV0aG9kICAgICAgICAgICBmcm9tICAgICAgICAgXG4gIHByaW50Lmh0bWx3aWRnZXQgdG9vbHM6cnN0dWRpb1xuUmVnaXN0ZXJlZCBTMyBtZXRob2Qgb3ZlcndyaXR0ZW4gYnkgJ21vc2FpYyc6XG4gIG1ldGhvZCAgICAgICAgICAgICAgICAgICAgICAgICAgIGZyb20gICBcbiAgZm9ydGlmeS5TcGF0aWFsUG9seWdvbnNEYXRhRnJhbWUgZ2dwbG90MlxuIn0= -->
-<pre><code>Loading required package: dplyr
-Registered S3 method overwritten by &#39;dplyr&#39;:
-  method           from
-  print.rowwise_df     
-
-Attaching package: 㤼㸱dplyr㤼㸲
-
-The following objects are masked from 㤼㸱package:stats㤼㸲:
-
-    filter, lag
-
-The following objects are masked from 㤼㸱package:base㤼㸲:
-
-    intersect, setdiff, setequal, union
-
-Loading required package: ggplot2
-Registered S3 methods overwritten by &#39;htmltools&#39;:
-  method               from         
-  print.html           tools:rstudio
-  print.shiny.tag      tools:rstudio
-  print.shiny.tag.list tools:rstudio
-Registered S3 method overwritten by &#39;htmlwidgets&#39;:
-  method           from         
-  print.htmlwidget tools:rstudio
-Registered S3 method overwritten by &#39;mosaic&#39;:
-  method                           from   
-  fortify.SpatialPolygonsDataFrame ggplot2</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-<div id="section" class="section level2">
-<h2></h2>
+<div id="importing-and-inspecting-data" class="section level2">
+<h2>Importing and Inspecting Data</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubnljZGF0YSA8LSByZWFkX2NzdihcIkFCX05ZQ18yMDE5LmNzdlwiKVxuYGBgIn0= -->
+<pre class="r"><code>nycdata &lt;- read_csv(&quot;AB_NYC_2019.csv&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICBpZCA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBuYW1lID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIGhvc3RfaWQgPSBcdTAwMWJbMzJtY29sX2RvdWJsZSgpXHUwMDFiWzM5bSxcbiAgaG9zdF9uYW1lID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIG5laWdoYm91cmhvb2RfZ3JvdXAgPSBcdTAwMWJbMzFtY29sX2NoYXJhY3RlcigpXHUwMDFiWzM5bSxcbiAgbmVpZ2hib3VyaG9vZCA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBsYXRpdHVkZSA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBsb25naXR1ZGUgPSBcdTAwMWJbMzJtY29sX2RvdWJsZSgpXHUwMDFiWzM5bSxcbiAgcm9vbV90eXBlID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIHByaWNlID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIG1pbmltdW1fbmlnaHRzID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIG51bWJlcl9vZl9yZXZpZXdzID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIGxhc3RfcmV2aWV3ID0gXHUwMDFiWzM0bWNvbF9kYXRlKGZvcm1hdCA9IFwiXCIpXHUwMDFiWzM5bSxcbiAgcmV2aWV3c19wZXJfbW9udGggPSBcdTAwMWJbMzJtY29sX2RvdWJsZSgpXHUwMDFiWzM5bSxcbiAgY2FsY3VsYXRlZF9ob3N0X2xpc3RpbmdzX2NvdW50ID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIGF2YWlsYWJpbGl0eV8zNjUgPSBcdTAwMWJbMzJtY29sX2RvdWJsZSgpXHUwMDFiWzM5bVxuKVxuIn0= -->
+<pre><code>Parsed with column specification:
+cols(
+  id = [32mcol_double()[39m,
+  name = [31mcol_character()[39m,
+  host_id = [32mcol_double()[39m,
+  host_name = [31mcol_character()[39m,
+  neighbourhood_group = [31mcol_character()[39m,
+  neighbourhood = [31mcol_character()[39m,
+  latitude = [32mcol_double()[39m,
+  longitude = [32mcol_double()[39m,
+  room_type = [31mcol_character()[39m,
+  price = [32mcol_double()[39m,
+  minimum_nights = [32mcol_double()[39m,
+  number_of_reviews = [32mcol_double()[39m,
+  last_review = [34mcol_date(format = &quot;&quot;)[39m,
+  reviews_per_month = [32mcol_double()[39m,
+  calculated_host_listings_count = [32mcol_double()[39m,
+  availability_365 = [32mcol_double()[39m
+)</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyKG55Y2RhdGEpXG5gYGAifQ== -->
+<pre class="r"><code>str(nycdata)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiQ2xhc3NlcyDigJhzcGVjX3RibF9kZuKAmSwg4oCYdGJsX2Rm4oCZLCDigJh0YmzigJkgYW5kICdkYXRhLmZyYW1lJzpcdDQ4ODk1IG9icy4gb2YgIDE2IHZhcmlhYmxlczpcbiAkIGlkICAgICAgICAgICAgICAgICAgICAgICAgICAgIDogbnVtICAyNTM5IDI1OTUgMzY0NyAzODMxIDUwMjIgLi4uXG4gJCBuYW1lICAgICAgICAgICAgICAgICAgICAgICAgICA6IGNociAgXCJDbGVhbiAmIHF1aWV0IGFwdCBob21lIGJ5IHRoZSBwYXJrXCIgXCJTa3lsaXQgTWlkdG93biBDYXN0bGVcIiBcIlRIRSBWSUxMQUdFIE9GIEhBUkxFTS4uLi5ORVcgWU9SSyAhXCIgXCJDb3p5IEVudGlyZSBGbG9vciBvZiBCcm93bnN0b25lXCIgLi4uXG4gJCBob3N0X2lkICAgICAgICAgICAgICAgICAgICAgICA6IG51bSAgMjc4NyAyODQ1IDQ2MzIgNDg2OSA3MTkyIC4uLlxuICQgaG9zdF9uYW1lICAgICAgICAgICAgICAgICAgICAgOiBjaHIgIFwiSm9oblwiIFwiSmVubmlmZXJcIiBcIkVsaXNhYmV0aFwiIFwiTGlzYVJveGFubmVcIiAuLi5cbiAkIG5laWdoYm91cmhvb2RfZ3JvdXAgICAgICAgICAgIDogY2hyICBcIkJyb29rbHluXCIgXCJNYW5oYXR0YW5cIiBcIk1hbmhhdHRhblwiIFwiQnJvb2tseW5cIiAuLi5cbiAkIG5laWdoYm91cmhvb2QgICAgICAgICAgICAgICAgIDogY2hyICBcIktlbnNpbmd0b25cIiBcIk1pZHRvd25cIiBcIkhhcmxlbVwiIFwiQ2xpbnRvbiBIaWxsXCIgLi4uXG4gJCBsYXRpdHVkZSAgICAgICAgICAgICAgICAgICAgICA6IG51bSAgNDAuNiA0MC44IDQwLjggNDAuNyA0MC44IC4uLlxuICQgbG9uZ2l0dWRlICAgICAgICAgICAgICAgICAgICAgOiBudW0gIC03NCAtNzQgLTczLjkgLTc0IC03My45IC4uLlxuICQgcm9vbV90eXBlICAgICAgICAgICAgICAgICAgICAgOiBjaHIgIFwiUHJpdmF0ZSByb29tXCIgXCJFbnRpcmUgaG9tZS9hcHRcIiBcIlByaXZhdGUgcm9vbVwiIFwiRW50aXJlIGhvbWUvYXB0XCIgLi4uXG4gJCBwcmljZSAgICAgICAgICAgICAgICAgICAgICAgICA6IG51bSAgMTQ5IDIyNSAxNTAgODkgODAgMjAwIDYwIDc5IDc5IDE1MCAuLi5cbiAkIG1pbmltdW1fbmlnaHRzICAgICAgICAgICAgICAgIDogbnVtICAxIDEgMyAxIDEwIDMgNDUgMiAyIDEgLi4uXG4gJCBudW1iZXJfb2ZfcmV2aWV3cyAgICAgICAgICAgICA6IG51bSAgOSA0NSAwIDI3MCA5IDc0IDQ5IDQzMCAxMTggMTYwIC4uLlxuICQgbGFzdF9yZXZpZXcgICAgICAgICAgICAgICAgICAgOiBEYXRlLCBmb3JtYXQ6IFwiMjAxOC0xMC0xOVwiIFwiMjAxOS0wNS0yMVwiIC4uLlxuICQgcmV2aWV3c19wZXJfbW9udGggICAgICAgICAgICAgOiBudW0gIDAuMjEgMC4zOCBOQSA0LjY0IDAuMSAwLjU5IDAuNCAzLjQ3IDAuOTkgMS4zMyAuLi5cbiAkIGNhbGN1bGF0ZWRfaG9zdF9saXN0aW5nc19jb3VudDogbnVtICA2IDIgMSAxIDEgMSAxIDEgMSA0IC4uLlxuICQgYXZhaWxhYmlsaXR5XzM2NSAgICAgICAgICAgICAgOiBudW0gIDM2NSAzNTUgMzY1IDE5NCAwIDEyOSAwIDIyMCAwIDE4OCAuLi5cbiAtIGF0dHIoKiwgXCJzcGVjXCIpPVxuICAuLiBjb2xzKFxuICAuLiAgIGlkID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIC4uICAgbmFtZSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICAuLiAgIGhvc3RfaWQgPSBcdTAwMWJbMzJtY29sX2RvdWJsZSgpXHUwMDFiWzM5bSxcbiAgLi4gICBob3N0X25hbWUgPSBcdTAwMWJbMzFtY29sX2NoYXJhY3RlcigpXHUwMDFiWzM5bSxcbiAgLi4gICBuZWlnaGJvdXJob29kX2dyb3VwID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIC4uICAgbmVpZ2hib3VyaG9vZCA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICAuLiAgIGxhdGl0dWRlID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIC4uICAgbG9uZ2l0dWRlID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIC4uICAgcm9vbV90eXBlID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIC4uICAgcHJpY2UgPSBcdTAwMWJbMzJtY29sX2RvdWJsZSgpXHUwMDFiWzM5bSxcbiAgLi4gICBtaW5pbXVtX25pZ2h0cyA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICAuLiAgIG51bWJlcl9vZl9yZXZpZXdzID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIC4uICAgbGFzdF9yZXZpZXcgPSBcdTAwMWJbMzRtY29sX2RhdGUoZm9ybWF0ID0gXCJcIilcdTAwMWJbMzltLFxuICAuLiAgIHJldmlld3NfcGVyX21vbnRoID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIC4uICAgY2FsY3VsYXRlZF9ob3N0X2xpc3RpbmdzX2NvdW50ID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIC4uICAgYXZhaWxhYmlsaXR5XzM2NSA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltXG4gIC4uIClcbiJ9 -->
+<pre><code>Classes ‘spec_tbl_df’, ‘tbl_df’, ‘tbl’ and &#39;data.frame&#39;:    48895 obs. of  16 variables:
+ $ id                            : num  2539 2595 3647 3831 5022 ...
+ $ name                          : chr  &quot;Clean &amp; quiet apt home by the park&quot; &quot;Skylit Midtown Castle&quot; &quot;THE VILLAGE OF HARLEM....NEW YORK !&quot; &quot;Cozy Entire Floor of Brownstone&quot; ...
+ $ host_id                       : num  2787 2845 4632 4869 7192 ...
+ $ host_name                     : chr  &quot;John&quot; &quot;Jennifer&quot; &quot;Elisabeth&quot; &quot;LisaRoxanne&quot; ...
+ $ neighbourhood_group           : chr  &quot;Brooklyn&quot; &quot;Manhattan&quot; &quot;Manhattan&quot; &quot;Brooklyn&quot; ...
+ $ neighbourhood                 : chr  &quot;Kensington&quot; &quot;Midtown&quot; &quot;Harlem&quot; &quot;Clinton Hill&quot; ...
+ $ latitude                      : num  40.6 40.8 40.8 40.7 40.8 ...
+ $ longitude                     : num  -74 -74 -73.9 -74 -73.9 ...
+ $ room_type                     : chr  &quot;Private room&quot; &quot;Entire home/apt&quot; &quot;Private room&quot; &quot;Entire home/apt&quot; ...
+ $ price                         : num  149 225 150 89 80 200 60 79 79 150 ...
+ $ minimum_nights                : num  1 1 3 1 10 3 45 2 2 1 ...
+ $ number_of_reviews             : num  9 45 0 270 9 74 49 430 118 160 ...
+ $ last_review                   : Date, format: &quot;2018-10-19&quot; &quot;2019-05-21&quot; ...
+ $ reviews_per_month             : num  0.21 0.38 NA 4.64 0.1 0.59 0.4 3.47 0.99 1.33 ...
+ $ calculated_host_listings_count: num  6 2 1 1 1 1 1 1 1 4 ...
+ $ availability_365              : num  365 355 365 194 0 129 0 220 0 188 ...
+ - attr(*, &quot;spec&quot;)=
+  .. cols(
+  ..   id = [32mcol_double()[39m,
+  ..   name = [31mcol_character()[39m,
+  ..   host_id = [32mcol_double()[39m,
+  ..   host_name = [31mcol_character()[39m,
+  ..   neighbourhood_group = [31mcol_character()[39m,
+  ..   neighbourhood = [31mcol_character()[39m,
+  ..   latitude = [32mcol_double()[39m,
+  ..   longitude = [32mcol_double()[39m,
+  ..   room_type = [31mcol_character()[39m,
+  ..   price = [32mcol_double()[39m,
+  ..   minimum_nights = [32mcol_double()[39m,
+  ..   number_of_reviews = [32mcol_double()[39m,
+  ..   last_review = [34mcol_date(format = &quot;&quot;)[39m,
+  ..   reviews_per_month = [32mcol_double()[39m,
+  ..   calculated_host_listings_count = [32mcol_double()[39m,
+  ..   availability_365 = [32mcol_double()[39m
+  .. )</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGVhZChueWNkYXRhKVxuYGBgIn0= -->
+<pre class="r"><code>head(nycdata)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibmNvbCI6MTYsIm5yb3ciOjZ9LCJyZGYiOiJINHNJQUFBQUFBQUFCcFZWVFl4VFJSeC91OTEydDExMldVUUpYbkFFWS9SQWdTVkxJaWJ1Vy9wQmdkYkZ0OGhpWXZLWXR0TytjYWN6ejNuenVwUW9jdkZrbEFNSEk0bkU2RUlNZmh3Z0pKcHcyR0RpUVJQalhveEg0T0tCeEpBWU5mSEFPcTh6ODJ3YlNHU1NsOS84ditiL01mLzVQeWQvWW0vbVJNYXlySVNWU0ExWmlhVGNXcW5jMFQzVE05T1dOVElzcVNGcnhFcEhlRXBxYlphYktmbE5SbXIyWjc5RTZwYTlVbFQ0NVJtRlgvMnU4TnBGalhjdHZTTGJsRDV3ZTQ0Z1NNR3o0TTBRSXdHZ0w0REhXZ2hVTzBCNENQaVFMMm5OSnhhV09nUUxVTUYxd1pZcHlNRkFFS1NGTzQ2VkN1RDRvWEo1N21BQnpCZEJhYzRwRnlwWnVWNHVMSUxYNXAwajRHbXQrbFNPbmU2QUFoV1lJMUFrakhIQUd1QUFsMmNHZ2xGejRtNnRNZWVML1dEQmh6WE13Z0FzaUxDTzJhNHlhNGdveEJxaWdrUFNHK2J6WmNpYkNIU2Q3QUVISEhrQTVLSWxGY0VoR2dkZmtNSEhGYnowdmFyUTVmMEtyMjdWRlVzcXZLSHBHeGNlVk1HUnc4eWplajkyR0ZHS0c0aHJPbDBnT0lCVkpEek5HQzlMMm1HbklJMFRUWlpoeUtFaGNoN0h3WUNITVZrY3RrUTZ4a3U2QXFrSGhZQVBaVHlLUmIrdnpCRkVBMHliOGlZMFoxVFhUSk9wRXVRRXRUUzFJVWN3bGJxZ2hBa3hPVWJGQlgxcTQ1V1FjOWhSV3Fic2VlZldIeisrdEdqblQ3WXYzdnlwYU9lYjcvKzk4dHNYZG43eDZwVTdINzVnNXhzejU5M3ZydHQ1OTlybDk1NWNNWGFyenBrWDUyRnpoOFMvdHZEcHlxcnpWbW5MdmRRSHE4N2I1UHFNZFY3U2I3dzY1bStTOGthMEJoTGNjSlRqTmhRSXlBcVo4RGJxWG9zNmY1ZDhBbyt1K24vWkp2ZnFKNnFsQ0ZCWVhWVjQzRlo0VFBXWmpVM0hLYnZaZTRvd2FJOE4wTS8wODJOLzJ6Vy9lTmJxWGJaL1M2R1JPMGFlVUhacnpXNWc5dHJIM2NEZTZmb1ovZFJlKy95czRqT05sMVRnL2RNcVdTTXdNTjFzbUNONVdWS0o5K09rZnJoOThPdkhUOStlL2ZXVnUrOXUrOGFKblR4Mjd2WG4vcng1YnZiYmo2SjFZZmFPMG91VDJxcUR0dnFMOERDTTdkby9LN3YyYm8yYTlteXJkOWtuZ2ZXZ3BDaHNJWlBVbEdZTzQ3cEpMeEticCtPeFFMaXhLTjBsZStTYktjSk5yOHBDN2pGV2Q1dWNoYjRXVGZTSnpMTW1VR0E1QVkxOW1qRGE3R05FbmVxS2poOFBGNS9qbWlFbVc1amlWdGh5cVR4YUJKcTdpWWF0S3VJdWE3Z2N0VEZhTm9KeGVYbEM4NHl1MW5COWFkQmlOSjVyMjJxUTFFSVpIcXE3M1N6bDNCTnlqQVJ1allYVVBJY3AySWFZd0NxVy81R091M2ZmakNydDhQcEFpMlRxVU1Cc2cwZVY2aSsrVEhBNWF5NWdJaXA4MUgvcjYrdi9xSTdxVXg1bHZzQ01TdFhoNkplWkhQQXl4QWNZRzBNYUhWM2ZXZk5DdXJSelh4UkpWNnpXaE42bmV2WlR5bVhDWkpBMFV4TEppL2x2eE11Y2tSbVBrOUdmTHNvZ0srOG1MazFHY29Pc1lBSWF2VXlORWNOUnIrWCt2Mkc0ZHdrcUNBQUEifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["id"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["host_id"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["host_name"],"name":[4],"type":["chr"],"align":["left"]},{"label":["neighbourhood_group"],"name":[5],"type":["chr"],"align":["left"]},{"label":["neighbourhood"],"name":[6],"type":["chr"],"align":["left"]},{"label":["latitude"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["longitude"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["room_type"],"name":[9],"type":["chr"],"align":["left"]},{"label":["price"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["minimum_nights"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["number_of_reviews"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["last_review"],"name":[13],"type":["date"],"align":["right"]},{"label":["reviews_per_month"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["calculated_host_listings_count"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["availability_365"],"name":[16],"type":["dbl"],"align":["right"]}],"data":[{"1":"2539","2":"Clean & quiet apt home by the park","3":"2787","4":"John","5":"Brooklyn","6":"Kensington","7":"40.64749","8":"-73.97237","9":"Private room","10":"149","11":"1","12":"9","13":"2018-10-19","14":"0.21","15":"6","16":"365"},{"1":"2595","2":"Skylit Midtown Castle","3":"2845","4":"Jennifer","5":"Manhattan","6":"Midtown","7":"40.75362","8":"-73.98377","9":"Entire home/apt","10":"225","11":"1","12":"45","13":"2019-05-21","14":"0.38","15":"2","16":"355"},{"1":"3647","2":"THE VILLAGE OF HARLEM....NEW YORK !","3":"4632","4":"Elisabeth","5":"Manhattan","6":"Harlem","7":"40.80902","8":"-73.94190","9":"Private room","10":"150","11":"3","12":"0","13":"<NA>","14":"NA","15":"1","16":"365"},{"1":"3831","2":"Cozy Entire Floor of Brownstone","3":"4869","4":"LisaRoxanne","5":"Brooklyn","6":"Clinton Hill","7":"40.68514","8":"-73.95976","9":"Entire home/apt","10":"89","11":"1","12":"270","13":"2019-07-05","14":"4.64","15":"1","16":"194"},{"1":"5022","2":"Entire Apt: Spacious Studio/Loft by central park","3":"7192","4":"Laura","5":"Manhattan","6":"East Harlem","7":"40.79851","8":"-73.94399","9":"Entire home/apt","10":"80","11":"10","12":"9","13":"2018-11-19","14":"0.10","15":"1","16":"0"},{"1":"5099","2":"Large Cozy 1 BR Apartment In Midtown East","3":"7322","4":"Chris","5":"Manhattan","6":"Murray Hill","7":"40.74767","8":"-73.97500","9":"Entire home/apt","10":"200","11":"3","12":"74","13":"2019-06-22","14":"0.59","15":"1","16":"129"}],"options":{"columns":{"min":{},"max":[10],"total":[16]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="data-cleaning" class="section level2">
+<h2>Data Cleaning</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="data-wrangling" class="section level2">
+<h2>Data Wrangling</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlNUQVQgMTg0IEZpbmFsIFByb2plY3QiDQpzdWJ0aXRsZTogIk5ZQyBBaXJCbmIgRGF0YSINCmF1dGhvcjogIkFubmEgTGVvbiINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCiMjIEZyb250IE1hdHRlcg0KDQpgYGB7cn0NCiMgY2xlYW4gdXAgd29ya3NwYWNlIGVudmlyb25tZW50DQpybShsaXN0ID0gbHMoKSkNCg0KIyBhbGwgcGFja2FnZXMgdXNlZCBmb3IgdGhlIGFzc2lnbm1lbnQNCmxpYnJhcnkoRGF0YUNvbXB1dGluZykNCg0KYGBgDQoNCiMjIA==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlNUQVQgMTg0IEZpbmFsIFByb2plY3QiDQpzdWJ0aXRsZTogIk5ZQyBBaXJCbmIgRGF0YSINCmF1dGhvcjogIkFubmEgTGVvbiINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCiMjIEZyb250IE1hdHRlcg0KDQpgYGB7cn0NCiMgY2xlYW4gdXAgd29ya3NwYWNlIGVudmlyb25tZW50DQpybShsaXN0ID0gbHMoKSkNCg0KIyBhbGwgcGFja2FnZXMgdXNlZCBmb3IgdGhlIGFzc2lnbm1lbnQNCmxpYnJhcnkoRGF0YUNvbXB1dGluZykNCmxpYnJhcnkocmVhZHIpDQpgYGANCg0KIyMgSW1wb3J0aW5nIGFuZCBJbnNwZWN0aW5nIERhdGENCg0KYGBge3J9DQpueWNkYXRhIDwtIHJlYWRfY3N2KCJBQl9OWUNfMjAxOS5jc3YiKQ0KDQpzdHIobnljZGF0YSkNCmhlYWQobnljZGF0YSkNCmBgYA0KDQojIyBEYXRhIENsZWFuaW5nDQoNCmBgYHtyfQ0KDQpgYGANCg0KIyMgRGF0YSBXcmFuZ2xpbmcNCg0KYGBge3J9DQoNCmBgYA0KDQo=</div>
 
 
 

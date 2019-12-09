@@ -13,7 +13,27 @@ rm(list = ls())
 
 # all packages used for the assignment
 library(DataComputing)
+library(readr)
+```
+
+## Importing and Inspecting Data
+
+```{r}
+nycdata <- read_csv("AB_NYC_2019.csv")
+
+str(nycdata)
+head(nycdata)
+```
+
+## Data Cleaning
+
+```{r}
 
 ```
 
-## 
+## Data Wrangling
+
+```{r}
+
+```
+
