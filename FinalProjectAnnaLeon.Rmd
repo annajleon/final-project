@@ -31,9 +31,17 @@ glimpse(NYC)
 
 ## Data Wrangling
 
+I am dropping variables id, host_name, last_review, and minimum_nights because they are not relevant to my analysis.
+```{r}
+NewNYC <-
+  NYC %>%
+    select(name, host_id, neighbourhood, neighbourhood_group, latitude, longitude, room_type, price, number_of_reviews, reviews_per_month, calculated_host_listings_count, availability_365)
+NewNYC
+```
+
 ```{r}
 BoroughAvgPrice <-
-  NYC %>%
+  NewNYC %>%
     group_by(borough = neighbourhood_group) %>%
     summarise(avg_price = round(mean(price, na.rm=TRUE))) %>%
     arrange(desc(avg_price))
@@ -42,20 +50,20 @@ BoroughAvgPrice
 
 ```{r}
 NYCwAvg <-
-  NYC %>%
+  NewNYC %>%
     left_join(BoroughAvgPrice, by = c("neighbourhood_group" = "borough")) %>%
     rename(avg_price_in_borough = avg_price)
 NYCwAvg
-```
-
-```{r}
-#insert nested ifs to fill column that says expensive, average, cheap for borough
 ```
 
 
 ## Data Visualization
 
 ```{r}
-
+NewNYC %>%
+  ggplot(aes(x=longitude, y=latitude)) + 
+  geom_point(aes(color = room_type))
 ```
+
+
 
