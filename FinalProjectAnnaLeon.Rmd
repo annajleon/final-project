@@ -14,6 +14,7 @@ rm(list = ls())
 # all packages used for the assignment
 library(DataComputing)
 library(readr)
+library(dplyr)
 ```
 
 ## Data Access
@@ -56,14 +57,32 @@ NYCwAvg <-
 NYCwAvg
 ```
 
+```{r}
+NeighborhoodAvgPrice <-
+  NewNYC %>%
+    group_by(neighbourhood) %>%
+    summarise(avg_price = round(mean(price, na.rm=TRUE))) %>%
+    arrange(desc(avg_price))
+
+HoodinBorough <-
+  NewNYC %>%
+    group_by(neighbourhood_group, neighbourhood) %>%
+    summarise(count = n())
+
+NeighborhoodsInfo <-
+  NeighborhoodAvgPrice %>%
+    left_join(HoodinBorough)
+
+NeighborhoodsInfo
+```
 
 ## Data Visualization
 
 ```{r}
-NewNYC %>%
-  ggplot(aes(x=longitude, y=latitude)) + 
-  geom_point(aes(color = room_type))
+NeighborhoodsInfo %>%
+  head(5) %>%
+  ggplot(aes(x=neighbourhood, y=avg_price)) + 
+  geom_point(aes(size=count)) 
 ```
-
 
 
