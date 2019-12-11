@@ -79,10 +79,13 @@ NeighborhoodsInfo
 ## Data Visualization
 
 ```{r}
+NeighborhoodsInfo$neighbourhood <- factor(NeighborhoodsInfo$neighbourhood,levels = c("Fort Wadsworth", "Woodrow", "Tribeca", "Sea Gate", "Riverdale"))
+
 NeighborhoodsInfo %>%
   head(5) %>%
   ggplot(aes(x=neighbourhood, y=avg_price)) + 
-  geom_point(aes(size=count)) 
+  geom_point(aes(size=count)) +
+  ggtitle("5 Most Expensive Neighborhoods for Airbnbs")
 ```
 
 
