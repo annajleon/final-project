@@ -41,6 +41,13 @@ NewNYC
 ```
 
 ```{r}
+NewNYC %>%
+  group_by(host_id) %>%
+  summarise(listings = n()) %>%
+  arrange(desc(listings))
+```
+
+```{r}
 BoroughAvgPrice <-
   NewNYC %>%
     group_by(borough = neighbourhood_group) %>%
