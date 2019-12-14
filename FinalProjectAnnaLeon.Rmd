@@ -52,37 +52,26 @@ NYC <-
 NYC
 ```
 
-### NYC Airbnb Hosts
+### NYC Airbnb Hosts and Top Hosts Favorite Boroughs
+
+Here, I have found who the top hosts are, defined as any host that has 30 or more listings in NYC. There are 27 of them.
 
 ```{r}
-HostListingsCount <-
+TopHosts <-
   NYC %>%
     group_by(host_id) %>%
     summarise(listings = n()) %>%
-    arrange(desc(listings))
-HostListingsCount
+    arrange(desc(listings)) %>%
+    filter(listings >= 30)
+TopHosts
 ```
 
-Now, host 219517861 has the most listings in NYC, 327. So, where are his listings?
-We can find out that they are all in Manhattan.
+As we can see here, the majority of the top hosts had the highest number of listings in Manhattan out of the five boroughs.
 
 ```{r}
-NYC %>%
-  filter(host_id == 219517861) %>%
-  group_by(borough) %>%
-  summarise(count = n())
-```
-
-### Listing Boroughs for Top Hosts
-
-As we can see here, nine out of the top ten hosts with the most Airbnb listings in NYC had the highest number of listings in Manhattan out of the five boroughs.
-```{r}
-TopHosts <-
-  HostListingsCount %>%
-    head(10)
 TopHosts$top_borough = NA
 
-for(i in 1:10){
+for(i in 1:27){
   Ranked <-
       NYC %>%
         filter(host_id == TopHosts$host_id[i]) %>%
@@ -92,24 +81,49 @@ for(i in 1:10){
         arrange(desc(rank)) 
     TopHosts$top_borough[i] <- toString(Ranked[1,1])
 }
+
 TopHosts
 ```
 
 ### Price Comparison between Boroughs
 
 ```{r}
-BoroughAvgPrice <-
+BoroughPrice <-
   NYC %>%
     group_by(borough) %>%
     summarise(avg_price = round(mean(price, na.rm=TRUE))) %>%
     arrange(desc(avg_price))
-BoroughAvgPrice
+BoroughPrice
+```
 
-NYCwAvg <-
+```{r}
+ListingPriceRange <-
   NYC %>%
-    left_join(BoroughAvgPrice, by = c("borough" = "borough")) %>%
-    rename(avg_price_in_borough = avg_price)
-NYCwAvg
+    left_join(BoroughPrice) %>%
+    select(name, borough, price, avg_price) %>%
+    rename(borough_price = avg_price)
+ListingPriceRange
+```
+
+```{r}
+ListingPriceRange$price_range = NA
+
+for(i in 1:48895){
+  if((ListingPriceRange[i,3] - ListingPriceRange[i, 4]) > 30){
+    range <- "expensive"
+  } else if((ListingPriceRange[i,3] - ListingPriceRange[i, 4]) < -30){
+    range <- "cheap"
+  } else{
+    range <- "moderate"
+  }
+     
+  ListingPriceRange$price_range[i] <- range
+}
+
+ListingPriceRange <-
+  ListingPriceRange %>%
+    select(name, borough, price_range)
+ListingPriceRange
 ```
 
 ### Price Comparison between Neighborhoods
@@ -201,7 +215,7 @@ HoodInfo$neighborhood <- factor(HoodInfo$neighborhood,levels = c("Fort Wadsworth
 
 HoodInfo %>%
   head(5) %>%
-  ggplot(aes(x=neighborhood, y=avg_price)) + 
+  ggplot(aes(x=neighborhood, y=avg_price_hood)) + 
   geom_point(aes(size=count)) +
   ggtitle("5 Most Expensive Neighborhoods for Airbnbs")
 ```
