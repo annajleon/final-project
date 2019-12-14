@@ -19,7 +19,7 @@ library(dplyr)
 
 ## Goal of my NYC Airbnb Data Exploration
 
-The goal of my exploration of the NYC Airbnb data is to blah. My primary research question is to figure out what the relative pricing is between boroughs and neighborhoods, and what hosts list the most expensive and inexpensive Airbnbs, as well as which hosts own the most listings?
+The goal of my exploration of the NYC Airbnb data is to figure out what the relative pricing is between boroughs, neighborhoods, and hosts. My primary research question is what hosts and locations should I look into if I want an expensive Airbnb? a cheap Airbnb?
 
 
 ## Data Access
@@ -32,25 +32,27 @@ NYC <- read_csv("AB_NYC_2019.csv")
 ### Exploring our Data
 
 ```{r}
-head(NYC)
+glimpse(NYC) 
 ```
 
 ```{r}
-glimpse(NYC) 
+head(NYC)
 ```
 
 
 ## Data Wrangling
 
-I am dropping variables id, host_name, last_review, and minimum_nights because they are not relevant to my analysis.
+I am dropping variables id, host_name, last_review, minimum_nights, and reviews_per_month because they are not relevant to my analysis. I am also dropping latitude and longitude because I am using neighbourhoods and neighbourhood_group to classify location rather than latitude and longitude. I am also changing the name of the neighbourhood_group column to borough because that is the more common term used to describe the areas of NYC: Manhattan, Bronx, etc. I also am renaming the neighbourhood column to neighborhood to represent American spelling. I also shortened some of the variable/column names. 
+
 ```{r}
 NYC <-
   NYC %>%
-    select(name, host_id, neighbourhood, neighbourhood_group, latitude, longitude, room_type, price, number_of_reviews, reviews_per_month, calculated_host_listings_count, availability_365)
+    select(name, host_id, neighbourhood, neighbourhood_group, room_type, price, calculated_host_listings_count, availability_365) %>%
+    rename(borough = neighbourhood_group, neighborhood = neighbourhood, host_listings_count = calculated_host_listings_count)
 NYC
 ```
 
-### Top NYC Airbnb Hosts
+### NYC Airbnb Hosts
 
 ```{r}
 HostListingsCount <-
@@ -67,7 +69,7 @@ We can find out that they are all in Manhattan.
 ```{r}
 NYC %>%
   filter(host_id == 219517861) %>%
-  group_by(neighbourhood_group) %>%
+  group_by(borough) %>%
   summarise(count = n())
 ```
 
@@ -84,7 +86,7 @@ for(i in 1:10){
   Ranked <-
       NYC %>%
         filter(host_id == TopHosts$host_id[i]) %>%
-        group_by(neighbourhood_group) %>%
+        group_by(borough) %>%
         summarise(count = n()) %>%
         mutate(rank = rank(count)) %>%
         arrange(desc(rank)) 
@@ -98,14 +100,14 @@ TopHosts
 ```{r}
 BoroughAvgPrice <-
   NYC %>%
-    group_by(borough = neighbourhood_group) %>%
+    group_by(borough) %>%
     summarise(avg_price = round(mean(price, na.rm=TRUE))) %>%
     arrange(desc(avg_price))
 BoroughAvgPrice
 
 NYCwAvg <-
   NYC %>%
-    left_join(BoroughAvgPrice, by = c("neighbourhood_group" = "borough")) %>%
+    left_join(BoroughAvgPrice, by = c("borough" = "borough")) %>%
     rename(avg_price_in_borough = avg_price)
 NYCwAvg
 ```
@@ -115,20 +117,49 @@ NYCwAvg
 ```{r}
 NeighborhoodAvgPrice <-
   NYC %>%
-    group_by(neighbourhood) %>%
+    group_by(neighborhood) %>%
     summarise(avg_price = round(mean(price, na.rm=TRUE))) %>%
     arrange(desc(avg_price))
 
 HoodinBorough <-
   NYC %>%
-    group_by(neighbourhood_group, neighbourhood) %>%
+    group_by(borough, neighborhood) %>%
     summarise(count = n())
 
-NeighborhoodsInfo <-
+HoodInfo <-
   NeighborhoodAvgPrice %>%
-    left_join(HoodinBorough)
+    left_join(HoodinBorough) %>%
+    left_join(BoroughAvgPrice, by = c("borough" = "borough")) %>%
+    rename(avg_price_hood = avg_price.x, avg_price_borough = avg_price.y)
+HoodInfo
+```
 
-NeighborhoodsInfo
+### Classifying Neighborhoods as Expensive, Moderate, or Cheap for their Borough
+
+Here, I want to classify each neighborhood as expensive, moderate, or cheap, as it compares to the average price of Airbnbs in its borough. That way users who want to stay in Queens, for example, can determine which neighborhoods within Queens are moderately priced, aka close to the average price of the borough.
+
+```{r}
+HoodPriceRange <-
+  HoodInfo %>%
+    select(neighborhood, avg_price_hood, avg_price_borough, borough)
+HoodPriceRange$price_range = NA
+
+for(i in 1:221){
+  if((HoodInfo[i,2] - HoodInfo[i, 5]) > 30){
+    range <- "expensive"
+  } else if((HoodInfo[i,2] - HoodInfo[i, 5]) < -30){
+    range <- "cheap"
+  } else{
+    range <- "moderate"
+  }
+     
+  HoodPriceRange$price_range[i] <- range
+}
+
+HoodPriceRange <-
+  HoodPriceRange %>%
+    select(neighborhood, borough, price_range)
+HoodPriceRange
 ```
 
 ### "Cozy" Airbnbs
@@ -166,11 +197,11 @@ NotCozyAirbnbs %>%
 ### Most Expensive Neighborhoods
 
 ```{r}
-NeighborhoodsInfo$neighbourhood <- factor(NeighborhoodsInfo$neighbourhood,levels = c("Fort Wadsworth", "Woodrow", "Tribeca", "Sea Gate", "Riverdale"))
+HoodInfo$neighborhood <- factor(HoodInfo$neighborhood,levels = c("Fort Wadsworth", "Woodrow", "Tribeca", "Sea Gate", "Riverdale"))
 
-NeighborhoodsInfo %>%
+HoodInfo %>%
   head(5) %>%
-  ggplot(aes(x=neighbourhood, y=avg_price)) + 
+  ggplot(aes(x=neighborhood, y=avg_price)) + 
   geom_point(aes(size=count)) +
   ggtitle("5 Most Expensive Neighborhoods for Airbnbs")
 ```
