@@ -54,36 +54,17 @@ NYC
 
 ### NYC Airbnb Hosts and Top Hosts Favorite Boroughs
 
-Here, I have found who the top hosts are, defined as any host that has 30 or more listings in NYC. There are 27 of them.
+I want to find out how expensive each host generally prices their listings. 
 
 ```{r}
-TopHosts <-
+HostsCharges <-
   NYC %>%
     group_by(host_id) %>%
-    summarise(listings = n()) %>%
-    arrange(desc(listings)) %>%
-    filter(listings >= 30)
-TopHosts
+    summarise(avg_charge = round(mean(price, na.rm = TRUE))) %>%
+    arrange(desc(avg_charge))
+HostsCharges
 ```
 
-As we can see here, the majority of the top hosts had the highest number of listings in Manhattan out of the five boroughs.
-
-```{r}
-TopHosts$top_borough = NA
-
-for(i in 1:27){
-  Ranked <-
-      NYC %>%
-        filter(host_id == TopHosts$host_id[i]) %>%
-        group_by(borough) %>%
-        summarise(count = n()) %>%
-        mutate(rank = rank(count)) %>%
-        arrange(desc(rank)) 
-    TopHosts$top_borough[i] <- toString(Ranked[1,1])
-}
-
-TopHosts
-```
 
 ### Price Comparison between Boroughs
 
@@ -206,6 +187,19 @@ NotCozyAirbnbs %>%
 
 
 ## Data Visualization
+
+### Histogram of Average Prices Charged by Hosts
+
+I removed outliers above an average charge of $1000 to better see the distribution in the majority of the data.
+
+```{r}
+HostsCharges %>%
+  ggplot(aes(x = avg_charge)) +
+  geom_histogram() +
+  xlim(0,1000) +
+  ylab("number of hosts") +
+  xlab("average charge per listing")
+```
 
 ### Most Expensive Neighborhoods
 
