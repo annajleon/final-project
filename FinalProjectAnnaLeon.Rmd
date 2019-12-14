@@ -235,13 +235,22 @@ HoodInfo %>%
 
 ### Listing Price Range per Borough
 
+In the following boxplot I removed some of the outliers by adjusting the y axis so that it only went up to 750. Note that all boroughs had a few upper price point Airbnbs removed from the plot, so that the majority of price points were easier to see and analyze.
+
 ```{r}
 ListingPriceRange$price_range <- factor(ListingPriceRange$price_range,levels = c("cheap", "moderate", "expensive"))
 
-ListingPriceRange %>%
-  ggplot(aes(x = price_range)) +
-  geom_bar() + 
-  facet_wrap(~ borough)
+GlyphReady <-
+  ListingPriceRange %>%
+    left_join(NYC) %>%
+    select(borough, price)
+
+GlyphReady %>%
+  ggplot(aes(y = price)) +
+  geom_boxplot() + 
+  facet_grid(~ borough) +
+  ylim(0,750) +
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
 ```
 
 ### Neighborhood Price Range per Borough
@@ -255,4 +264,3 @@ HoodPriceRange %>%
   facet_wrap(~ borough)
 ```
   
-
