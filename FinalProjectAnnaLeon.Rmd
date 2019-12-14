@@ -40,12 +40,16 @@ NewNYC <-
 NewNYC
 ```
 
+### Top NYC Airbnb Hosts
+
 ```{r}
 NewNYC %>%
   group_by(host_id) %>%
   summarise(listings = n()) %>%
   arrange(desc(listings))
 ```
+
+### Price Comparison between Boroughs
 
 ```{r}
 BoroughAvgPrice <-
@@ -63,6 +67,8 @@ NYCwAvg <-
     rename(avg_price_in_borough = avg_price)
 NYCwAvg
 ```
+
+### Price Comparison between Neighborhoods
 
 ```{r}
 NeighborhoodAvgPrice <-
@@ -85,7 +91,7 @@ NeighborhoodsInfo
 
 ### "Cozy" Airbnbs
 
-Now, I will be investigating the difference between price and availability of airbnbs that do not have the word cozy in their title with those that do.
+Now, I will be investigating the difference between price and availability of airbnbs that do not have the word cozy in their title with those that do. It turns out that airbnbs that are described as cozy typically cost less than their counterparts; however, their availability is lower as well. 
 
 ```{r}
 CozyAirbnbs <-
@@ -114,6 +120,8 @@ NotCozyAirbnbs %>%
 
 
 ## Data Visualization
+
+### Most Expensive Neighborhoods
 
 ```{r}
 NeighborhoodsInfo$neighbourhood <- factor(NeighborhoodsInfo$neighbourhood,levels = c("Fort Wadsworth", "Woodrow", "Tribeca", "Sea Gate", "Riverdale"))
