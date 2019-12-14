@@ -83,6 +83,36 @@ NeighborhoodsInfo <-
 NeighborhoodsInfo
 ```
 
+### "Cozy" Airbnbs
+
+Now, I will be investigating the difference between price and availability of airbnbs that do not have the word cozy in their title with those that do.
+
+```{r}
+CozyAirbnbs <-
+  NewNYC %>%
+    filter(grepl("cozy", name, ignore.case = TRUE))
+
+NotCozyAirbnbs <-
+  NewNYC %>%
+    filter(!grepl("cozy", name, ignore.case = TRUE))
+
+CozyAirbnbs
+NotCozyAirbnbs
+
+CozyAirbnbs %>%
+  summarise(ave_cost = round(mean(price, na.rm = TRUE), 2))
+
+NotCozyAirbnbs %>%
+  summarise(ave_cost = round(mean(price, na.rm = TRUE), 2))
+
+CozyAirbnbs %>%
+  summarise(ave_availability = round(mean(availability_365, na.rm = TRUE)))
+
+NotCozyAirbnbs %>%
+  summarise(ave_availability = round(mean(availability_365, na.rm = TRUE)))
+```
+
+
 ## Data Visualization
 
 ```{r}
