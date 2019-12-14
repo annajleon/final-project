@@ -134,21 +134,21 @@ NeighborhoodAvgPrice <-
     group_by(neighborhood) %>%
     summarise(avg_price = round(mean(price, na.rm=TRUE))) %>%
     arrange(desc(avg_price))
+NeighborhoodAvgPrice
 
 HoodinBorough <-
   NYC %>%
     group_by(borough, neighborhood) %>%
     summarise(count = n())
+HoodinBorough
 
 HoodInfo <-
   NeighborhoodAvgPrice %>%
     left_join(HoodinBorough) %>%
-    left_join(BoroughAvgPrice, by = c("borough" = "borough")) %>%
+    left_join(BoroughPrice, by = c("borough" = "borough")) %>%
     rename(avg_price_hood = avg_price.x, avg_price_borough = avg_price.y)
 HoodInfo
 ```
-
-### Classifying Neighborhoods as Expensive, Moderate, or Cheap for their Borough
 
 Here, I want to classify each neighborhood as expensive, moderate, or cheap, as it compares to the average price of Airbnbs in its borough. That way users who want to stay in Queens, for example, can determine which neighborhoods within Queens are moderately priced, aka close to the average price of the borough.
 
@@ -226,4 +226,27 @@ HoodInfo %>%
 slices <- c(9,1)
 pie(slices, labels = c("Manhattan, Queens"), main="Favorite Boroughs of Top Hosts")
 ```
+
+### Listing Price Range per Borough
+
+```{r}
+ListingPriceRange$price_range <- factor(ListingPriceRange$price_range,levels = c("cheap", "moderate", "expensive"))
+
+ListingPriceRange %>%
+  ggplot(aes(x = price_range)) +
+  geom_bar() + 
+  facet_wrap(~ borough)
+```
+
+### Neighborhood Price Range per Borough
+
+```{r}
+HoodPriceRange$price_range <- factor(HoodPriceRange$price_range,levels = c("cheap", "moderate", "expensive"))
+
+HoodPriceRange %>%
+  ggplot(aes(x = price_range)) +
+  geom_bar() + 
+  facet_wrap(~ borough)
+```
+  
 
