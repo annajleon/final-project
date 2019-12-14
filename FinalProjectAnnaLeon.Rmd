@@ -19,7 +19,8 @@ library(dplyr)
 
 ## Goal of my NYC Airbnb Data Exploration
 
-The goal of my exploration of the NYC Airbnb data is to blah.
+The goal of my exploration of the NYC Airbnb data is to blah. My primary research question is to figure out what the relative pricing is between boroughs and neighborhoods, and what hosts list the most expensive and inexpensive Airbnbs, as well as which hosts own the most listings?
+
 
 ## Data Access
 
