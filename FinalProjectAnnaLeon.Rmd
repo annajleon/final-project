@@ -222,13 +222,6 @@ HoodShort %>%
   ggtitle("5 Most Expensive Neighborhoods for Airbnbs")
 ```
 
-### Favorite borough of top ten hosts visualization 
-
-```{r}
-slices <- c(9,1)
-pie(slices, labels = c("Manhattan, Queens"), main="Favorite Boroughs of Top Hosts")
-```
-
 ### Price Distribution
 
 ```{r}
