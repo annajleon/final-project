@@ -19,10 +19,18 @@ library(dplyr)
 
 ## Data Access
 
+### Reading in Data
 ```{r}
 NYC <- read_csv("AB_NYC_2019.csv")
+```
 
+### Exploring our Data
+
+```{r}
 head(NYC)
+```
+
+```{r}
 names(NYC)
 ```
 
@@ -43,10 +51,22 @@ NewNYC
 ### Top NYC Airbnb Hosts
 
 ```{r}
+HostListingsCount <-
+  NewNYC %>%
+    group_by(host_id) %>%
+    summarise(listings = n()) %>%
+    arrange(desc(listings))
+HostListingsCount
+```
+
+Now, host 219517861 has the most listings in NYC, 327. So, where are his listings?
+We can find out that they are all in Manhattan.
+
+```{r}
 NewNYC %>%
-  group_by(host_id) %>%
-  summarise(listings = n()) %>%
-  arrange(desc(listings))
+  filter(host_id == 219517861) %>%
+  group_by(neighbourhood_group) %>%
+  summarise(count = n())
 ```
 
 ### Price Comparison between Boroughs
@@ -133,4 +153,32 @@ NeighborhoodsInfo %>%
   ggtitle("5 Most Expensive Neighborhoods for Airbnbs")
 ```
 
+### Listing Boroughs for Top Hosts
+
+As we can see here, nine out of the top ten hosts with the most Airbnb listings in NYC had the highest number of listings in Manhattan out of the five boroughs.
+```{r}
+TopHosts <-
+  HostListingsCount %>%
+    head(10)
+TopHosts$top_borough = NA
+
+for(i in 1:10){
+  Ranked <-
+      NewNYC %>%
+        filter(host_id == TopHosts$host_id[i]) %>%
+        group_by(neighbourhood_group) %>%
+        summarise(count = n()) %>%
+        mutate(rank = rank(count)) %>%
+        arrange(desc(rank)) 
+    TopHosts$top_borough[i] <- toString(Ranked[1,1])
+}
+TopHosts
+```
+
+### Favorite borough of top ten hosts visualization 
+
+```{r}
+slices <- c(9,1)
+pie(slices, labels = c("Manhattan, Queens"), main="Favorite Boroughs of Top Hosts")
+```
 
