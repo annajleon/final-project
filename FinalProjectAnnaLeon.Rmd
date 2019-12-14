@@ -140,7 +140,6 @@ HoodinBorough <-
   NYC %>%
     group_by(borough, neighborhood) %>%
     summarise(count = n())
-HoodinBorough
 
 HoodInfo <-
   NeighborhoodAvgPrice %>%
@@ -211,10 +210,13 @@ NotCozyAirbnbs %>%
 ### Most Expensive Neighborhoods
 
 ```{r}
-HoodInfo$neighborhood <- factor(HoodInfo$neighborhood,levels = c("Fort Wadsworth", "Woodrow", "Tribeca", "Sea Gate", "Riverdale"))
+HoodShort <-
+  HoodInfo %>%
+    head(5)
 
-HoodInfo %>%
-  head(5) %>%
+HoodShort$neighborhood <- factor(HoodShort$neighborhood,levels = c("Fort Wadsworth", "Woodrow", "Tribeca", "Sea Gate", "Riverdale"))
+
+HoodShort %>%
   ggplot(aes(x=neighborhood, y=avg_price_hood)) + 
   geom_point(aes(size=count)) +
   ggtitle("5 Most Expensive Neighborhoods for Airbnbs")
@@ -225,6 +227,17 @@ HoodInfo %>%
 ```{r}
 slices <- c(9,1)
 pie(slices, labels = c("Manhattan, Queens"), main="Favorite Boroughs of Top Hosts")
+```
+
+### Price Distribution
+
+```{r}
+HoodInfo %>%
+  ggplot(aes(x = neighborhood, y = avg_price_hood)) +
+  geom_point() +
+  facet_grid(~ borough) + 
+  ylab("average price of neighborhood") +
+  theme(axis.text.x = element_blank())
 ```
 
 ### Listing Price Range per Borough
