@@ -201,6 +201,19 @@ HostsCharges %>%
   xlab("average charge per listing")
 ```
 
+```{r}
+HostsCharges %>%
+  group_by(avg_charge) %>%
+  summarise(count = n()) %>%
+  ggplot(aes(x = avg_charge, y= count)) +
+  geom_point() +
+  geom_smooth() +
+  xlim(0, 1000) +
+  ylim(0, 1000) +
+  ylab("number of hosts") +
+  xlab("average charge per listing")
+```
+
 ### Most Expensive Neighborhoods
 
 ```{r}
@@ -221,7 +234,7 @@ HoodShort %>%
 ```{r}
 HoodInfo %>%
   ggplot(aes(x = neighborhood, y = avg_price_hood)) +
-  geom_point() +
+  geom_point(aes(shape = borough)) +
   facet_grid(~ borough) + 
   ylab("average price of neighborhood") +
   theme(axis.text.x = element_blank())
