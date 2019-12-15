@@ -1,6 +1,6 @@
 ---
 title: 'Final Project: Guidance Document'
-author: "Anna Leon"
+author: "Anna"
 date: "Due December 17, 2019"
 output:  html_notebook
 ---
