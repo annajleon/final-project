@@ -44,12 +44,12 @@ head(NYC)
 
 ## Data Wrangling
 
-Before I begin wrangling the data, I am dropping variables id, host_name, last_review, minimum_nights, room_type, and reviews_per_month because they are not relevant to the analysis that I will be doing. I am also dropping latitude and longitude because I am using neighborhoods and neighborhood groups to classify location rather than latitude and longitude. I am also changing the name of the neighbourhood_group column to borough because that is the more common term used to describe the areas of NYC: Manhattan, Bronx, etc. I also am renaming the neighbourhood column to neighborhood to represent American spelling. I also shortened some of the variable/column names. 
+Before I begin wrangling the data, I am dropping variables id, host_name, last_review, minimum_nights, room_type, reviews_per_month, and availability_365 because they are not relevant to the analysis that I will be doing. I am also dropping latitude and longitude because I am using neighborhoods and neighborhood groups to classify location rather than latitude and longitude. I am also changing the name of the neighbourhood_group column to borough because that is the more common term used to describe the areas of NYC: Manhattan, Bronx, etc. I also am renaming the neighbourhood column to neighborhood to represent American spelling. I also shortened some of the variable/column names. 
 
 ```{r}
 NYC <-
   NYC %>%
-    select(name, host_id, neighbourhood, neighbourhood_group, price, calculated_host_listings_count, availability_365) %>%
+    select(name, host_id, neighbourhood, neighbourhood_group, price, calculated_host_listings_count) %>%
     rename(borough = neighbourhood_group, neighborhood = neighbourhood, host_listings_count = calculated_host_listings_count)
 ```
 
@@ -154,7 +154,7 @@ HoodPriceRange
 
 ### "Cozy" Airbnbs
 
-Now, I will be investigating the difference between price and availability of airbnbs that do not have the word cozy in their title with those that do. It turns out that airbnbs that are described as cozy typically cost less than their counterparts; however, their availability is lower as well. This may be due to the fact that cozy typically means a smaller space, while the positive connotation of the word may lead to a higher number of reservations and thus less availability.
+Now, I will be investigating the difference between price and availability of airbnbs that do not have the word cozy in their title with those that do. It turns out that airbnbs that are described as cozy typically cost less than their counterparts. This may be due to the fact that cozy typically means a smaller space.
 
 ```{r}
 CozyAirbnbs <-
@@ -173,12 +173,6 @@ CozyAirbnbs %>%
 
 NotCozyAirbnbs %>%
   summarise(ave_cost = round(mean(price, na.rm = TRUE), 2))
-
-CozyAirbnbs %>%
-  summarise(ave_availability = round(mean(availability_365, na.rm = TRUE)))
-
-NotCozyAirbnbs %>%
-  summarise(ave_availability = round(mean(availability_365, na.rm = TRUE)))
 ```
 
 
