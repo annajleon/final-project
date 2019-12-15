@@ -185,9 +185,9 @@ NotCozyAirbnbs %>%
 
 ## Data Visualization
 
-### Histogram of Average Prices Charged by Hosts
+### Histogram and Scatterplot of Average Prices Charged by Hosts
 
-I removed outliers above an average charge of $1000 to better see the distribution in the majority of the data.
+Below is a Histogram of the average charge on the x axis and the number of hosts is on the y axis. I removed outliers above an average charge of $1000 to better see the distribution in the majority of the data.
 
 ```{r}
 HostsCharges %>%
@@ -195,8 +195,11 @@ HostsCharges %>%
   geom_histogram() +
   xlim(0,1000) +
   ylab("number of hosts") +
-  xlab("average charge per listing")
+  xlab("average charge per listing") +
+  ggtitle("Hosts Average Charge")
 ```
+
+Below is a similar plot of the same data, except this time with a scatterplot and smoother. The smoother allows us to see the trend in the data. As average charge increases the number of hosts decreases.
 
 ```{r}
 HostsCharges %>%
@@ -211,7 +214,9 @@ HostsCharges %>%
   xlab("average charge per listing")
 ```
 
-### Most Expensive Neighborhoods
+### Most Expensive Neighborhoods Scatterplot
+
+Below is a scatterplot of the top five most expensive neighborhoods for Airbnbs in NYC. I used size of the points to represent count, how many Airbnbs there are in that neighborhood, so that we could get an idea of how many Airbnb price points wennt into the calculation of that neighborhood's average price. I also used a factor to order the x axis so that the neighborhoods were in decreasing order by average price. 
 
 ```{r}
 HoodShort <-
@@ -227,7 +232,9 @@ HoodShort %>%
   ggtitle("5 Most Expensive Neighborhoods for Airbnbs")
 ```
 
-### Price Distribution
+### Price Distribution of all Neighborhoods - Faceted by Borough
+
+Below is a scatterplot of all of the neighborhoods this time. I faceted the graph by borough and also shaped the points by borough as well to ensure that viewers could easily tell which points belonged to which borough. It is clear that Manhattan's neighborhoods are generally pricier than the other boroughs.
 
 ```{r}
 HoodInfo %>%
@@ -240,7 +247,7 @@ HoodInfo %>%
 
 ### Listing Price Range per Borough
 
-In the following boxplot I removed some of the outliers by adjusting the y axis so that it only went up to 750. Note that all boroughs had a few upper price point Airbnbs removed from the plot, so that the majority of price points were easier to see and analyze.
+The following boxplot shows the price distribution of listings, faceted by borough. I removed some of the outliers by adjusting the y axis so that it only went up to 750. Note that all boroughs had a few upper price point Airbnbs removed from the plot, so that the majority of price points were easier to see and analyze.
 
 ```{r}
 ListingPriceRange$price_range <- factor(ListingPriceRange$price_range,levels = c("cheap", "moderate", "expensive"))
@@ -258,7 +265,18 @@ GlyphReady %>%
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
 ```
 
+The boxplot below is the same plot as above, except not faceted by borough, so it is just for the general all listings in general. I again limited the y axis to (0,750).
+
+```{r}
+GlyphReady %>%
+  ggplot(aes(y = price)) +
+  geom_boxplot() + 
+  ylim(0, 750)
+```
+
 ### Neighborhood Price Range per Borough
+
+This faceted bar chart shows the number of Airbnbs that are in the various price ranges per borough. For whatever reason, we can determine that Queens has a ton of Airbnbs in the moderate range, close to its average price, and very few that are much cheaper than that.
 
 ```{r}
 HoodPriceRange$price_range <- factor(HoodPriceRange$price_range,levels = c("cheap", "moderate", "expensive"))
