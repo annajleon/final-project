@@ -17,7 +17,7 @@ library(readr)
 library(dplyr)
 ```
 
-## Goal of my NYC Airbnb Data Exploration
+## Goal of NYC Airbnb Data Exploration
 
 The goal of my exploration of the NYC Airbnb data is to figure out what the relative pricing is between boroughs, neighborhoods, hosts, and various descriptions. My primary research question is what hosts, locations, and keywords should I look into if I want an expensive Airbnb? a cheap Airbnb?
 
@@ -27,16 +27,22 @@ The goal of my exploration of the NYC Airbnb data is to figure out what the rela
 
 ### Reading in Data
 ```{r}
+# Here, I read in my csv data file.
+
 NYC <- read_csv("AB_NYC_2019.csv")
 ```
 
-### Exploring our Data
+### Exploring the Data
 
 ```{r}
+# Here, I use glimpse function to inspect the data. As you can see, there are 48,895 observations (rows), and there are 16 variables (columns).
+
 glimpse(NYC) 
 ```
 
 ```{r}
+# Here, I use head to investigate the data. We can see that there is a wide variety of naming styles used to name listings; there are also some variables that may not be relevant to our analysis. 
+
 head(NYC)
 ```
 
@@ -44,13 +50,15 @@ head(NYC)
 
 ## Data Wrangling
 
-Before I begin wrangling the data, I am dropping variables id, host_name, last_review, minimum_nights, room_type, reviews_per_month, and availability_365 because they are not relevant to the analysis that I will be doing. I am also dropping latitude and longitude because I am using neighborhoods and neighborhood groups to classify location rather than latitude and longitude. I am also changing the name of the neighbourhood_group column to borough because that is the more common term used to describe the areas of NYC: Manhattan, Bronx, etc. I also am renaming the neighbourhood column to neighborhood to represent American spelling. I also shortened some of the variable/column names. 
+Before I begin wrangling the data, I am dropping variables id, host_name, last_review, minimum_nights, room_type, reviews_per_month, and availability_365 because they are not relevant to the analysis that I will be doing. I am also dropping latitude and longitude because I am using neighborhoods and neighborhood groups to classify location rather than latitude and longitude. I am also changing the name of the neighbourhood_group column to borough because that is the more common term used to describe the areas of NYC: Manhattan, Bronx, etc. I also am renaming the neighbourhood column to neighborhood to represent American spelling. I also shortened some of the variable/column names. I am also removing the calculated_host_listings_count variable because it will be more effective for me to summarise host listings data if I group by host_id myself.
 
 ```{r}
+# Here, I select only the variables I want, and rename a couple of the variables into more understandable names.
+
 NYC <-
   NYC %>%
-    select(name, host_id, neighbourhood, neighbourhood_group, price, calculated_host_listings_count) %>%
-    rename(borough = neighbourhood_group, neighborhood = neighbourhood, host_listings_count = calculated_host_listings_count)
+    select(name, host_id, neighbourhood, neighbourhood_group, price) %>%
+    rename(borough = neighbourhood_group, neighborhood = neighbourhood)
 ```
 
 ### NYC Airbnb Hosts and the Average Prices they Charge
@@ -58,11 +66,14 @@ NYC <-
 I want to find out how expensive each host generally prices their listings. Some hosts tend to own more expensive properties and charge higher prices.
 
 ```{r}
+# Here, I create the table HostsCharges by using group_by, summarise, and arrange functions with our data table NYC. HostCharges contains host_id and the average price that that host charges for their listings in the avg_charge column.
+
 HostsCharges <-
   NYC %>%
     group_by(host_id) %>%
     summarise(avg_charge = round(mean(price, na.rm = TRUE))) %>%
     arrange(desc(avg_charge))
+
 HostsCharges
 ```
 
@@ -71,29 +82,38 @@ HostsCharges
 Here, I wanted to rank the boroughs based on average Airbnb price. As you can see, Manhattan is the most expensive borough, while Brooklyn comes in second. Additionally, the Bronx is the only borough with an average Airbnb price less than 100.
 
 ```{r}
+# Here, I create table BoroughPrice to rank the boroughs by average price.
+
 BoroughPrice <-
   NYC %>%
     group_by(borough) %>%
     summarise(avg_price = round(mean(price, na.rm=TRUE))) %>%
     arrange(desc(avg_price))
+
 BoroughPrice
 ```
 
 Here, I joined the BoroughPrice table above with another and used a for loop, as well as if, else if, and else statements to create a column that tells whether a given listing is cheap, moderate, or expensive based on the average price of the borough in which it resides. Now, it is easy to tell which Airbnbs are expensive and which are not, without having to go through the guesswork of looking at tens of thousands of rows to compare prices.
 
 ```{r}
+# Here, I create a table ListingPriceRange by using a left_join between NYC and the BoroughPrice table that I created above.
+
 ListingPriceRange <-
   NYC %>%
     left_join(BoroughPrice) %>%
     select(name, borough, price, avg_price) %>%
     rename(borough_price = avg_price)
 
+# Here, I add an additional column to the ListingPriceRange table called price_range and fill it with NA values. Later, I will fill this column in with non-NA values.
+
 ListingPriceRange$price_range = NA
 
+# Here, I run a for loop which iterates over every row in ListingPriceRange (there are 48895 rows). I used if, else if, and else statements to calculate whether the listing is cheap, moderate, or expensive for its respective borough. I defined cheap as less than $30 lower than the average price of the borough, expensive as more than $30 higher than the average price of the borough, and moderate as any price in between (no more than $30 more or less than the average price of the borough).
+
 for(i in 1:48895){
-  if((ListingPriceRange[i,3] - ListingPriceRange[i, 4]) > 30){
+  if((ListingPriceRange[i, 3] - ListingPriceRange[i, 4]) > 30){
     range <- "expensive"
-  } else if((ListingPriceRange[i,3] - ListingPriceRange[i, 4]) < -30){
+  } else if((ListingPriceRange[i, 3] - ListingPriceRange[i, 4]) < -30){
     range <- "cheap"
   } else{
     range <- "moderate"
@@ -102,9 +122,12 @@ for(i in 1:48895){
   ListingPriceRange$price_range[i] <- range
 }
 
+# Here, I select only the columns that I want: name, borough, and price_range.
+
 ListingPriceRange <-
   ListingPriceRange %>%
     select(name, borough, price_range)
+
 ListingPriceRange
 ```
 
@@ -113,15 +136,21 @@ ListingPriceRange
 I then carried out a similar investigation on the neighborhoods, rather than individual listings. Again, I want to classify each neighborhood as cheap, moderate, or expensive, as it compares to the average price of Airbnbs in its borough. That way users who want to stay in Queens, for example, can determine which neighborhoods within Queens are moderately priced, aka close to the average price of the borough.
 
 ```{r}
+# Here, I create the table NeighborhoodAvgPrice, which includes columns neighborhood and avg_price, which represents the average listing price of that neighborhood.
+
 NeighborhoodAvgPrice <-
   NYC %>%
     group_by(neighborhood) %>%
     summarise(avg_price = round(mean(price, na.rm=TRUE)))
 
+# Here, I create a table called HoodinBorough, which contains columns borough, neighborhood, and count, which represents the number of listings in that neighborhood.
+
 HoodinBorough <-
   NYC %>%
     group_by(borough, neighborhood) %>%
     summarise(count = n())
+
+# Here, I create the table HoodInfo by joining NeighborhoodAvgPrice, HoodinBorough, and BoroughPrice. 
 
 HoodInfo <-
   NeighborhoodAvgPrice %>%
@@ -129,15 +158,20 @@ HoodInfo <-
     left_join(BoroughPrice, by = c("borough" = "borough")) %>%
     rename(avg_price_hood = avg_price.x, avg_price_borough = avg_price.y)
 
+# Here, I create table HoodPriceRange by selecting only the columns neighborhood, avg_price_hood, avg_price_borough, and borough from HoodInfo. I then added an additional column to the table, price_range, that I temporarily filled with NA values.
+
 HoodPriceRange <-
   HoodInfo %>%
     select(neighborhood, avg_price_hood, avg_price_borough, borough)
+
 HoodPriceRange$price_range = NA
 
+# Here, I run another for loop very similar to the one in the previous section, using if, else if, and else statements to classify neighborhoods as cheap, moderate, or expensive for their respective boroughs.
+
 for(i in 1:221){
-  if((HoodInfo[i,2] - HoodInfo[i, 5]) > 30){
+  if((HoodInfo[i, 2] - HoodInfo[i, 5]) > 30){
     range <- "expensive"
-  } else if((HoodInfo[i,2] - HoodInfo[i, 5]) < -30){
+  } else if((HoodInfo[i, 2] - HoodInfo[i, 5]) < -30){
     range <- "cheap"
   } else{
     range <- "moderate"
@@ -146,9 +180,12 @@ for(i in 1:221){
   HoodPriceRange$price_range[i] <- range
 }
 
+# Here, I select only the relevant columns: neighborhood, borough, and price_range.
+
 HoodPriceRange <-
   HoodPriceRange %>%
     select(neighborhood, borough, price_range)
+
 HoodPriceRange
 ```
 
@@ -157,21 +194,26 @@ HoodPriceRange
 Now, I will be investigating the difference between price and availability of airbnbs that do not have the word cozy in their title with those that do. It turns out that airbnbs that are described as cozy typically cost less than their counterparts. This may be due to the fact that cozy typically means a smaller space.
 
 ```{r}
-CozyAirbnbs <-
+# Here, I create a table called Cozy using regex and the filter and grepl functions. I want to find all of the listings that mention the word "cozy" in their names. I also created the table NotCozy to find the Airbnbs that do not mention "cozy" in their names.
+
+Cozy <-
   NYC %>%
     filter(grepl("cozy", name, ignore.case = TRUE))
 
-NotCozyAirbnbs <-
+Cozy
+
+NotCozy <-
   NYC %>%
     filter(!grepl("cozy", name, ignore.case = TRUE))
 
-CozyAirbnbs
-NotCozyAirbnbs
+NotCozy
 
-CozyAirbnbs %>%
+# Here, I calculated the average price of Cozy Airbnbs and NotCozy Airbnbs, to compare the two.
+
+Cozy %>%
   summarise(ave_cost = round(mean(price, na.rm = TRUE), 2))
 
-NotCozyAirbnbs %>%
+NotCozy %>%
   summarise(ave_cost = round(mean(price, na.rm = TRUE), 2))
 ```
 
@@ -184,10 +226,12 @@ NotCozyAirbnbs %>%
 Below is a Histogram of the average charge on the x axis and the number of hosts is on the y axis. I removed outliers above an average charge of $1000 to better see the distribution in the majority of the data.
 
 ```{r}
+# Here, I create a histogram using ggplot and the HostsCharges table from earlier in this report. I limited the x axis to 1000 to remove some outliers and focus on the range of average charges that had the majority of data in it.
+
 HostsCharges %>%
   ggplot(aes(x = avg_charge)) +
   geom_histogram() +
-  xlim(0,1000) +
+  xlim(0, 1000) +
   ylab("number of hosts") +
   xlab("average charge per listing") +
   ggtitle("Hosts Average Charge")
@@ -196,10 +240,12 @@ HostsCharges %>%
 Below is a similar plot of the same data, except this time with a scatterplot and smoother. The smoother allows us to see the trend in the data. As average charge increases the number of hosts decreases.
 
 ```{r}
+# Here is a similar plot using the same data; however, this time I created a scatterplot and used a smoother over top of it.
+
 HostsCharges %>%
   group_by(avg_charge) %>%
   summarise(count = n()) %>%
-  ggplot(aes(x = avg_charge, y= count)) +
+  ggplot(aes(x = avg_charge, y = count)) +
   geom_point() +
   geom_smooth() +
   xlim(0, 1000) +
@@ -213,16 +259,22 @@ HostsCharges %>%
 Below is a scatterplot of the top five most expensive neighborhoods for Airbnbs in NYC. I used size of the points to represent count, how many Airbnbs there are in that neighborhood, so that we could get an idea of how many Airbnb price points wennt into the calculation of that neighborhood's average price. I also used a factor to order the x axis so that the neighborhoods were in decreasing order by average price. 
 
 ```{r}
+# Here, I created a table HoodShort, which is just the head of HoodInfo arranged by descending average price of the neighborhood. 
+
 HoodShort <-
   HoodInfo %>%
     arrange(desc(avg_price_hood)) %>%
     head(5)
 
+# Here, I used a factor to rearrange the x axis of the below scatterplot so that it was in order of decreasing average price in the neighborhood. 
+
 HoodShort$neighborhood <- factor(HoodShort$neighborhood,levels = c("Fort Wadsworth", "Woodrow", "Tribeca", "Sea Gate", "Riverdale"))
 
+# Here, I create the scatterplot from HoodShort, using ggplot. I mapped count to size to represent the number of Airbnbs in each neighborhood to gain perspective on how many listings actually went into the calculation of each neighborhood's average price. 
+
 HoodShort %>%
-  ggplot(aes(x=neighborhood, y=avg_price_hood)) + 
-  geom_point(aes(size=count)) +
+  ggplot(aes(x = neighborhood, y = avg_price_hood)) + 
+  geom_point(aes(size = count)) +
   ggtitle("5 Most Expensive Neighborhoods for Airbnbs")
 ```
 
@@ -231,10 +283,12 @@ HoodShort %>%
 Below is a scatterplot of all of the neighborhoods this time. I faceted the graph by borough and also shaped the points by borough as well to ensure that viewers could easily tell which points belonged to which borough. It is clear that Manhattan's neighborhoods are generally pricier than the other boroughs.
 
 ```{r}
+# Here, I created a scatterplot of all of the neighborhoods and their average prices. I also faceted by borough, and mapped borough to shape as well so that it was clear which points were a part of which borough. 
+
 HoodInfo %>%
   ggplot(aes(x = neighborhood, y = avg_price_hood)) +
   geom_point(aes(shape = borough)) +
-  facet_grid(~ borough) + 
+  facet_grid( ~ borough) + 
   ylab("average price of neighborhood") +
   theme(axis.text.x = element_blank())
 ```
@@ -244,24 +298,32 @@ HoodInfo %>%
 The following boxplot shows the price distribution of listings, faceted by borough. I removed some of the outliers by adjusting the y axis so that it only went up to 750. Note that all boroughs had a few upper price point Airbnbs removed from the plot, so that the majority of price points were easier to see and analyze.
 
 ```{r}
+# Here, I reordered the x axis using a factor so that the levels were in the order of cheap, moderate, then expensive. 
+
 ListingPriceRange$price_range <- factor(ListingPriceRange$price_range,levels = c("cheap", "moderate", "expensive"))
+
+# Here, I got the ListingPriceRange into glyph ready form by using a left_join with NYC.
 
 GlyphReady <-
   ListingPriceRange %>%
     left_join(NYC) %>%
     select(borough, price)
 
+# Here, I plotted the table GlyphReady with ggplot and geom_boxplot to show the price distributions in each borough. 
+
 GlyphReady %>%
   ggplot(aes(y = price)) +
   geom_boxplot() + 
-  facet_grid(~ borough) +
-  ylim(0,750) +
+  facet_grid( ~ borough) +
+  ylim(0, 750) +
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
 ```
 
 The boxplot below is the same plot as above, except not faceted by borough, so it is just for the general all listings in general. I again limited the y axis to (0,750).
 
 ```{r}
+# Here, I used the same data as above to create a similar plot, except this time it is not faceted by borough. This allows us to see the general makeup of our listing data.
+
 GlyphReady %>%
   ggplot(aes(y = price)) +
   geom_boxplot() + 
@@ -273,11 +335,15 @@ GlyphReady %>%
 This faceted bar chart shows the number of Airbnbs that are in the various price ranges per borough. For whatever reason, we can determine that Queens has a ton of Airbnbs in the moderate range, close to its average price, and very few that are much cheaper than that.
 
 ```{r}
+# Here, I again used a factor to rearrange the order of the x axis levels. 
+
 HoodPriceRange$price_range <- factor(HoodPriceRange$price_range,levels = c("cheap", "moderate", "expensive"))
+
+# Here, I used ggplot to make a bar graph with HoodPriceRange, faceting by borough.
 
 HoodPriceRange %>%
   ggplot(aes(x = price_range)) +
   geom_bar() + 
-  facet_wrap(~ borough)
+  facet_wrap( ~ borough)
 ```
   
